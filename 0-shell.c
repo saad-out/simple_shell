@@ -12,8 +12,7 @@
  *
  * Return: always 0 (Success)
  */
-int main(__attribute__((unused))int ac, __attribute__((unused))char **av,
-__attribute__((unused))char **env)
+int main(__attribute__((unused))int ac, char **av, char **env)
 {
 	char *command, **args;
 	int mode, ret;
@@ -25,13 +24,21 @@ __attribute__((unused))char **env)
 		if (mode)
 			write(STDOUT_FILENO, "$ ", 2);
 		command = read_command();
-		if (!command)
+		if (command && (command[0] == '\n' || !_strcmp(command, "env")))
 		{
-			write(STDOUT_FILENO, "\n", 1);
+			if (command[0] != '\n')
+				print_env(env);
+			free(command);
+			continue;
+		}
+		if (!command || !_strcmp(command, "exit"))
+		{
+			if (!command)
+				write(STDOUT_FILENO, "\n", 1);
 			break;
 		}
 		args = read_args(command);
-		ret = execute_command(args, env);
+		ret = execute_command(args, env, av[0]);
 
 		free(command);
 		free(args);
