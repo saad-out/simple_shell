@@ -9,7 +9,7 @@ It is created using the C programming Language and it can do many functionalitie
 
 [Hamza Annane](https://github.com/annanesec/) and [Saad Out](https://github.com/saad-out/)
 
-:computer: Functions and System calls Used in This Project :computer:
+:computer: Functions Used in This Project :computer:
 
 | Function | Description |
 | ----------- | ----------- |
