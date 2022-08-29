@@ -4,6 +4,7 @@
 
 /**
  * read_commad - reads command from user input
+ * 
  * Return: pointer to allocated command string
  */
 char *read_command(void)
@@ -18,12 +19,11 @@ char *read_command(void)
 		buffer = NULL;
 		return (buffer);
 	}
-	for (j = 0; buffer[j] != '\n'; j++)
-	{
+	for (j = 0; buffer[j] != '\n'; j++){}
 	while (j < i)
 		buffer[j++] = '\0';
 	return (buffer);
-	}
+}
 
 /**
  * read_args - split given buffer into command and it's arguments
