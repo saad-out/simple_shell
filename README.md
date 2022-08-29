@@ -27,8 +27,7 @@ It is created using the C programming Language and it can do many functionalitie
 | _strcpy |copies string from source to destination |
 
 # List of allowed functions and system calls for this project
-
-    :heavy_check_mark: access (man 2 access)
+:heavy_check_mark: access (man 2 access)
     :heavy_check_mark: chdir (man 2 chdir)
     :heavy_check_mark:close (man 2 close)
     :heavy_check_mark:closedir (man 3 closedir)
