@@ -26,7 +26,10 @@ It is created using the C programming Language and it can do many functionalitie
 | _strcmp | compares two strings | 
 | _strcpy |copies string from source to destination |
 
-# List of allowed functions and system calls for this project
+# Compilation
+Your shell will be compiled this way:
+| gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh |
+
 
 
 
