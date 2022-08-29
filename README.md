@@ -27,8 +27,6 @@ It is created using the C programming Language and it can do many functionalitie
 | _strcpy |copies string from source to destination |
 
 # List of allowed functions and system calls for this project
-:black_circle: access
-:black_circle: chdir
 
 
 
