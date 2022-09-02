@@ -25,6 +25,8 @@ char *read_command(void)
 		j++;
 	while (j < i)
 		buffer[j++] = '\0';
+	if(buffer)
+		buffer = strtok(buffer, "#");
 
 	return (buffer);
 }
