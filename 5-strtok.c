@@ -44,8 +44,6 @@ char *_strtok(char *s, const char *del)
 
 	if (*t)
 		*t = '\0', t++;
-	/* while (*t && is_del(*t, del)) */
-	/* *t = '\0', t++; */
 	return (tok);
 }
 

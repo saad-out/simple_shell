@@ -48,7 +48,7 @@ ssize_t _getline(char **line, __attribute__((unused))size_t *n, int fd)
 	*n = ++size;
 	*line = malloc(sizeof(char) * (size + 1));
 	if (!(*line))
-		printf("hh");
+		return (-1);
 	fill_buff((*line), buffer + i);
 	i += size;
 
