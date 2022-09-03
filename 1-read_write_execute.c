@@ -14,7 +14,7 @@ char *read_command(void)
 
 	i = 0;
 	buffer = NULL;
-	if (getline(&buffer, &i, stdin) == -1)
+	if (_getline(&buffer, &i, STDIN_FILENO) == -1)
 	{
 		buffer = NULL;
 		return (buffer);
@@ -25,8 +25,9 @@ char *read_command(void)
 		j++;
 	while (j < i)
 		buffer[j++] = '\0';
-	if(buffer)
-		buffer = strtok(buffer, "#");
+
+	if (buffer)
+		buffer = remove_comments(buffer);
 
 	return (buffer);
 }
@@ -49,12 +50,12 @@ char **read_args(char *buffer)
 		perror("Failed to allocate memory for args"), exit(1);
 
 	del = "\t\n ";
-	tok = strtok(buffer, del);
+	tok = _strtok(buffer, del);
 	n = 0;
 	while (tok)
 	{
 		args[n++] = tok;
-		tok = strtok(0, del);
+		tok = _strtok(0, del);
 	}
 	for (; n < ARGS_SIZE; n++)
 		args[n] = NULL;

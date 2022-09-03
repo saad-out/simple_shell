@@ -10,6 +10,19 @@
 #include <errno.h>
 #include <string.h>
 
+/**
+ * struct builtin - specify which builtin to execute
+ * @cmd: command/builtin
+ * @f: function pointer to execute bultin
+ */
+typedef struct builtin
+{
+	char *cmd;
+	int (*f)(char *, char **, char **);
+} bt;
+
+int (*check_builtins(char *))(char *, char **, char **);
+
 /* Take input - Split it into arguments - Execute command */
 char *read_command(void);
 char **read_args(char *);
@@ -20,12 +33,21 @@ char *get_PATH(char **);
 char **make_copy(char **);
 char *get_command(char *, char *);
 char *is_path(char *, char *);
-void print_env(char **);
+void fill_buff(char *, char *);
+ssize_t _getline(char **, size_t *, int);
+
+/* Builtins' functions */
+int print_env(char *, char **, char **);
+int perform_exit(char *, char **, char **);
 
 /* Helper functions similar to those of the C Standard Library */
 void free_2D(char **);
 int _strcmp(char *, char *);
 int _strlen(char *);
 char *_strcpy(char *, char *);
+int is_del(char, const char *);
+char *_strtok(char *, const char *);
+char *remove_comments(char *);
+int my_atoi(char *);
 
 #endif /* H */

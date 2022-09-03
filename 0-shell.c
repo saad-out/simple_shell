@@ -16,6 +16,7 @@ int main(__attribute__((unused))int ac, char **av, char **env)
 {
 	char *command, **args;
 	int mode, ret;
+	int (*f)(char *, char **, char **);
 
 	mode = 1, ret = 1;
 	while (mode && ret)
@@ -24,24 +25,31 @@ int main(__attribute__((unused))int ac, char **av, char **env)
 		if (mode)
 			write(STDOUT_FILENO, "$ ", 2);
 		command = read_command();
-		if (command && (command[0] == '\n' || !_strcmp(command, "env")))
+		if (!command || !(*command) || (command[0] == '\n'))
 		{
-			if (command[0] != '\n')
-				print_env(env);
+			if (!command)
+			{
+				write(STDOUT_FILENO, "\n", 1);
+				break;
+			}
 			free(command);
 			continue;
 		}
-		if (!command || !_strcmp(command, "exit"))
-		{
-			if (!command)
-				write(STDOUT_FILENO, "\n", 1);
-			break;
-		}
-		args = read_args(command);
-		ret = execute_command(args, env, av[0]);
 
-		free(command);
-		free(args);
+		args = read_args(command);
+		if (!args || !args[0])
+		{
+			free(command), free(args);
+			continue;
+		}
+		f = check_builtins(args[0]);
+		if (f)
+			ret = f(command, args, env);
+		else
+		{
+			ret = execute_command(args, env, av[0]);
+			free(command), free(args);
+		}
 	}
 	return (0);
 }

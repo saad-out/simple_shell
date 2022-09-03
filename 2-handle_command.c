@@ -53,13 +53,13 @@ char *get_PATH(char **env)
 	i = 0, del = "=";
 	while (env[i])
 	{
-		tok = strtok(env[i], del);
+		tok = _strtok(env[i], del);
 		if (!_strcmp("PATH", tok))
 			break;
 		i++;
 	}
 	if (env[i])
-		tok = strtok(NULL, del);
+		tok = _strtok(NULL, del);
 	else
 		tok = NULL;
 	return (tok);
@@ -91,35 +91,15 @@ char *get_command(char *command, char *path)
 		return (cmd);
 	}
 
-	tok = strtok(path, del);
+	tok = _strtok(path, del);
 	while (tok)
 	{
 		cmd = is_path(tok, command);
 		if (cmd)
 			return (cmd);
-		tok = strtok(NULL, del);
+		tok = _strtok(NULL, del);
 	}
 	return (NULL);
-}
-
-/**
- * print_env - print the list of environment varibales
- * @env: environment variables array of strings
- *
- * Return: void
- */
-void print_env(char **env)
-{
-	unsigned int i;
-
-	if (!env)
-		perror("NULL argument to print_env"), exit(1);
-
-	for (i = 0; env[i]; i++)
-	{
-		write(STDOUT_FILENO, env[i], _strlen(env[i]));
-		write(STDOUT_FILENO, "\n", 1);
-	}
 }
 
 /**
