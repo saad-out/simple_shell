@@ -83,7 +83,7 @@ int execute_command(char **args, char **env, char *exc)
 		command = get_command(args[0], path);
 	if (!args[0] || !command)
 	{
-		perror(exc);
+		display_error(NULL, args[0], "not found");
 		free(command), free_2D(env_copy);
 		return (1);
 	}

@@ -18,10 +18,10 @@
 typedef struct builtin
 {
 	char *cmd;
-	int (*f)(char *, char **, char **);
+	int (*f)(char *, char **, char ***);
 } bt;
 
-int (*check_builtins(char *))(char *, char **, char **);
+int (*check_builtins(char *))(char *, char **, char ***);
 
 /* Take input - Split it into arguments - Execute command */
 char *read_command(void);
@@ -35,10 +35,22 @@ char *get_command(char *, char *);
 char *is_path(char *, char *);
 void fill_buff(char *, char *);
 ssize_t _getline(char **, size_t *, int);
+void display_error(char *, char *, char *);
 
 /* Builtins' functions */
-int print_env(char *, char **, char **);
-int perform_exit(char *, char **, char **);
+int print_env(char *, char **, char ***);
+int perform_exit(char *, char **, char ***);
+int set_env(char *, char **, char ***);
+int unset_env(char *, char **, char ***);
+
+/* related to builtins */
+char *get_name(char *);
+int does_exist(char *, char **);
+char *change_var(char *, char **, int);
+char **add_var(char **, char *, char *);
+char **alloc_space(char **);
+char *new_var(char *, char *);
+char **remove_var(char **, int);
 
 /* Helper functions similar to those of the C Standard Library */
 void free_2D(char **);

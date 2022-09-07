@@ -8,16 +8,16 @@
  *
  * Return: always 1
  */
-int print_env(char *command, char **args, char **env)
+int print_env(char *command, char **args, char ***env)
 {
 	int i;
 
 	if (!command || !args || !env)
 		perror("NULL arument to print_env()"), exit(1);
 
-	for (i = 0; env[i]; i++)
+	for (i = 0; (*env)[i]; i++)
 	{
-		write(STDOUT_FILENO, env[i], _strlen(env[i]));
+		write(STDOUT_FILENO, (*env)[i], _strlen((*env)[i]));
 		write(STDOUT_FILENO, "\n", 1);
 	}
 	free(command);
@@ -62,7 +62,7 @@ int my_atoi(char *n)
  *
  * Return: do not return (Succes) | 1 (Failure)
  */
-int perform_exit(char *command, char **args, char **env)
+int perform_exit(char *command, char **args, char ***env)
 {
 	int status;
 
@@ -80,7 +80,7 @@ int perform_exit(char *command, char **args, char **env)
 			return (1);
 		}
 	}
-	free(command), free(args);
+	free(command), free(args), free_2D(*env);
 	exit(status);
 	return (1);
 }

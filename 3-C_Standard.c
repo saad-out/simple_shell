@@ -28,6 +28,8 @@ int _strlen(char *s)
 {
 	int size, i;
 
+	if (!s)
+		return (0);
 	i = 0;
 	size = 0;
 	while (s[i++] != '\0')

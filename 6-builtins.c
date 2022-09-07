@@ -6,11 +6,13 @@
  *
  * Return: function pointer to execute builtin | NULL (not a builtin:
  */
-int (*check_builtins(char *command))(char *, char **, char **)
+int (*check_builtins(char *command))(char *, char **, char ***)
 {
 	bt list[] = {
 		{"env", print_env},
 		{"exit", perform_exit},
+		{"setenv", set_env},
+		{"unsetenv", unset_env},
 		{NULL, NULL}
 	};
 	int i;
