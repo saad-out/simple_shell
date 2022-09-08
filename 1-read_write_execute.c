@@ -14,7 +14,7 @@ char *read_command(void)
 
 	i = 0;
 	buffer = NULL;
-	if (_getline(&buffer, &i, STDIN_FILENO) == -1)
+	if (getline(&buffer, &i, stdin) == -1)
 	{
 		buffer = NULL;
 		return (buffer);
