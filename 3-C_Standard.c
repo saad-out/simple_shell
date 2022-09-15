@@ -85,3 +85,19 @@ char *_strcpy(char *dest, char *src)
 
 	return (dest);
 }
+
+/**
+ * len_2D - get length of 2D array of strings
+ * @s: 2D array
+ *
+ * Return: length
+ */
+size_t len_2D(char **s)
+{
+	size_t i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (++i);
+}

@@ -57,22 +57,19 @@ int unset_env(char *command, char **args, char ***env)
 
 	if (!args[0] || !args[1] || args[2])
 	{
-		free(command), free(args);
-		display_error(NULL, NULL, "Bad variable name");
+		display_error(NULL, NULL, "Bad variable name", NULL);
 		return (1);
 	}
 
 	i = does_exist(args[1], *env);
 	if (i < 0)
 	{
-		free(command), free(args);
-		display_error(NULL, NULL, "Variable does not exist");
+		display_error(NULL, NULL, "Bad variable name", NULL);
 		return (1);
 	}
 	new_env = remove_var(*env, i);
 	free(*env), *env = NULL;
 	*env = new_env;
-	free(command), free(args);
 
 	return (1);
 

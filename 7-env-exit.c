@@ -20,8 +20,6 @@ int print_env(char *command, char **args, char ***env)
 		write(STDOUT_FILENO, (*env)[i], _strlen((*env)[i]));
 		write(STDOUT_FILENO, "\n", 1);
 	}
-	free(command);
-	free(args);
 	return (1);
 }
 
@@ -76,7 +74,7 @@ int perform_exit(char *command, char **args, char ***env)
 		status = my_atoi(args[1]);
 		if (status == -1)
 		{
-			perror("Illegal number"), free(command), free(args);
+			display_error(NULL, command, "Illegal number", args[1]);
 			return (1);
 		}
 	}

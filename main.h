@@ -1,6 +1,7 @@
 #ifndef H
 #define H
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -24,9 +25,9 @@ typedef struct builtin
 int (*check_builtins(char *))(char *, char **, char ***);
 
 /* Take input - Split it into arguments - Execute command */
-char *read_command(void);
-char **read_args(char *);
-int execute_command(char **, char **, char *);
+char *read_command(char **);
+char **read_args(char *, char **);
+int execute_command(char *, char **, char ***, char *);
 
 /* Functions to handle commands */
 char *get_PATH(char **);
@@ -35,7 +36,9 @@ char *get_command(char *, char *);
 char *is_path(char *, char *);
 void fill_buff(char *, char *);
 ssize_t _getline(char **, size_t *, int);
-void display_error(char *, char *, char *);
+void display_error(char *, char *, char *, char *);
+int _execve(char **, char **, char *);
+char *full_path(char *, char **);
 
 /* Builtins' functions */
 int print_env(char *, char **, char ***);
@@ -61,5 +64,6 @@ int is_del(char, const char *);
 char *_strtok(char *, const char *);
 char *remove_comments(char *);
 int my_atoi(char *);
+size_t len_2D(char **);
 
 #endif /* H */

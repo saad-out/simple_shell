@@ -103,8 +103,7 @@ int set_env(char *command, char **args, char ***env)
 
 	if (!args[0] || !args[1] || !args[2] || args[3])
 	{
-		free(command), free(args);
-		display_error(NULL, NULL, "Bad variable name");
+		display_error(NULL, NULL, "Bad variable name", NULL);
 		return (1);
 	}
 
@@ -122,6 +121,5 @@ int set_env(char *command, char **args, char ***env)
 		*env = new_env;
 	}
 
-	free(command), free(args);
 	return (1);
 }

@@ -4,30 +4,28 @@
 
 /**
  * read_command - reads command from user input
+ * @env: environment variables list (to be freed in case of EOF or error)
  *
  * Return: pointer to allocated command string
  */
-char *read_command(void)
+char *read_command(__attribute__((unused))char **env)
 {
 	char *buffer;
-	size_t i, j;
+	size_t i;
 
-	i = 0;
-	buffer = NULL;
+	i = 0, buffer = NULL;
 	if (getline(&buffer, &i, stdin) == -1)
 	{
-		buffer = NULL;
-		return (buffer);
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "\n", 1);
+		free(buffer), buffer = NULL;
+		free_2D(env), env = NULL;
+		exit(0);
 	}
-	for (j = 0; buffer[j] != '\n'; j++)
-	{}
-	if (!j)
-		j++;
-	while (j < i)
-		buffer[j++] = '\0';
 
-	if (buffer)
-		buffer = remove_comments(buffer);
+	remove_comments(buffer);
+	if (buffer && (buffer[0] == '\0'))
+		buffer[0] = '\n';
 
 	return (buffer);
 }
@@ -35,10 +33,11 @@ char *read_command(void)
 /**
  * read_args - split given buffer into command and it's arguments
  * @buffer: given buffer
+ * @env: environment variables list (to be freed)
  *
  * Return: array of 'command and arguments' strings
  */
-char **read_args(char *buffer)
+char **read_args(char *buffer, __attribute__((unused))char **env)
 {
 	char **args;
 	char *tok;
@@ -66,47 +65,41 @@ char **read_args(char *buffer)
 /**
  * execute_command - executes given command if it exists
  * @args: array of strings containing the command and it's arguments
- * @env: environment variables
- * @exc: executable name (to be displayed with error message)
+ * @command: entered command (to be freed)
+ * @args: command and it's arguments
+ * @env: pointer to environment variables list
+ * @exec: executable name (to be displayed with error message)
  *
  * Return: 1 (Succes) | 0 (Failure)
  */
-int execute_command(char **args, char **env, char *exc)
+int execute_command(char *command, char **args, char ***env, char *exec)
 {
-	char **env_copy;
-	char *path, *command;
-	pid_t my_pid;
+	int (*f)(char *, char **, char ***);
+	char *cmd, *old;
+	int i;
 
-	env_copy = make_copy(env);
-	path = get_PATH(env_copy);
-	if (args && args[0])
-		command = get_command(args[0], path);
-	if (!args[0] || !command)
+	if (!command || !args || !env || !exec)
 	{
-		display_error(NULL, args[0], "not found");
-		free(command), free_2D(env_copy);
-		return (1);
-	}
-
-	my_pid = fork();
-	if (!my_pid)
-	{
-		if (execve(command, args, env) == -1)
-		{
-			perror(exc);
-			free(command), free_2D(env_copy);
-			exit(1);
-		}
-	}
-	else if (my_pid < 0)
-	{
-		perror("Fork fail");
-		free(command), free_2D(env_copy);
+		perror("NULL argument to execute_command()");
 		return (0);
 	}
-	else
-		wait(NULL);
+	if (args && !args[0])
+		return (1);
 
-	free_2D(env_copy), free(command);
-	return (1);
+	f = check_builtins(args[0]);
+	if (f)
+		return (f(command, args, env));
+
+	old = args[0];
+	cmd = full_path(args[0], *env);
+	if (!cmd)
+		display_error(NULL, args[0], "not found", NULL), i = 1;
+	else
+	{
+		args[0] = cmd;
+		i = _execve(args, *env, exec);
+		free(cmd);
+		args[0] = old;
+	}
+	return (i);
 }

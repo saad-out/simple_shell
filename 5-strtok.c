@@ -33,7 +33,6 @@ char *_strtok(char *s, const char *del)
 
 	if (s)
 		t = s;
-	/* here */
 	while (*t && is_del(*t, del))
 		*t = '\0', t++;
 	tok = t;

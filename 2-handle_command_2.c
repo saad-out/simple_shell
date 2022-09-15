@@ -1,42 +1,34 @@
 #include "main.h"
 
 /**
- * make_copy - create copy of the environment varibales array of strings
- * @env: environment variables
+ * full_path - gets full path of a command/program
+ * @cmd: entered command/program
+ * @env: environment variables list
  *
- * Return: copy
+ * Return: pointer to full path command
  */
-char **make_copy(char **env)
+char *full_path(char *cmd, char **env)
 {
-	char **copy;
-	unsigned int i, size;
+	char **env_copy;
+	char *full_cmd, *path;
 
-	if (!env)
-		return (NULL);
-	i = 0;
-	while (env[i])
-		i++;
-
-	copy = malloc(sizeof(char *) * (++i));
-	if (!copy)
-		perror("Can't allocate memory for copy"), exit(1);
-	i = 0;
-	while (env[i])
+	if (!cmd || !env)
+		perror("NULL argument to full_path()"), exit(1);
+	if (cmd && cmd[0] == '/')
 	{
-		size = _strlen(env[i]);
-		copy[i] = malloc(sizeof(char) * (++size));
-		if (!copy[i])
-		{
-			free_2D(copy);
-			perror("Can't allocate memory for copy"), exit(1);
-		}
-		copy[i] = _strcpy(copy[i], env[i]);
-		i++;
+		full_cmd = malloc(sizeof(char) * (_strlen(cmd) + 1));
+		if (!full_cmd)
+			perror("Can't allocate memory for full_cmd"), exit(1);
+		full_cmd = _strcpy(full_cmd, cmd);
+		return (full_cmd);
 	}
-	copy[i] = NULL;
-	return (copy);
-}
 
+	env_copy = make_copy(env);
+	path = get_PATH(env_copy);
+	full_cmd = get_command(cmd, path);
+	free_2D(env_copy);
+	return (full_cmd);
+}
 
 /**
  * get_PATH - finds the path environment variable
@@ -65,7 +57,6 @@ char *get_PATH(char **env)
 	return (tok);
 }
 
-
 /**
  * get_command - get full path of a command if it exists
  * @command: command name
@@ -82,14 +73,6 @@ char *get_command(char *command, char *path)
 
 	if (!command || !path)
 		perror("empty arg to get_command()"), exit(1);
-	if (command && command[0] == '/')
-	{
-		cmd = malloc(sizeof(char) * (_strlen(command) + 1));
-		if (!cmd)
-			perror("Can't allocate memory for cmd"), exit(1);
-		cmd = _strcpy(cmd, command);
-		return (cmd);
-	}
 
 	tok = _strtok(path, del);
 	while (tok)
@@ -117,8 +100,8 @@ char *is_path(char *dir, char *exec)
 	if (!dir || !exec)
 		perror("empty arg to is_path()"), exit(1);
 
-	size = _strlen(dir) + _strlen(exec);
-	buffer = malloc(sizeof(char) * (++size));
+	size = _strlen(dir) + _strlen(exec) + 2;
+	buffer = malloc(sizeof(char) * size);
 	if (!buffer)
 		perror("Can't allocate memory for buffer"), exit(1);
 
