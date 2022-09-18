@@ -14,7 +14,7 @@ char *full_path(char *cmd, char **env)
 
 	if (!cmd || !env)
 		perror("NULL argument to full_path()"), exit(1);
-	if (cmd && cmd[0] == '/')
+	if (cmd && (cmd[0] == '/' || cmd[0] == '.'))
 	{
 		full_cmd = malloc(sizeof(char) * (_strlen(cmd) + 1));
 		if (!full_cmd)

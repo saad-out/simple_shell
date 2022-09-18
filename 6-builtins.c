@@ -13,6 +13,7 @@ int (*check_builtins(char *command))(char *, char **, char ***)
 		{"exit", perform_exit},
 		{"setenv", set_env},
 		{"unsetenv", unset_env},
+		{"cd", cd},
 		{NULL, NULL}
 	};
 	int i;
